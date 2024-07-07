@@ -49,8 +49,8 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/<<start>><br/>"
-        f"/api/v1.0/<<start>>/<<end>>"
+        f"/api/v1.0/&lt;start&gt; - Specify start date in 'YYYY-MM-DD' format<br/>"
+        f"/api/v1.0/&lt;start&gt;/&lt;end&gt; - Specify start and end dates in 'YYYY-MM-DD' format"
     )
 
 #Establishing Precipitation route
@@ -131,16 +131,45 @@ def tobs():
     
 #Establishing [Start] route
 @app.route("/api/v1.0/<start>")
-def start(startdate):
+@app.route("/api/v1.0/<start>/<end>")
+def temperature_stats(start=None, end=None):
     #Create our session (link) from Python to the DB
-    session=Session(bind=engine)
-    #Convert start date from string to datetime
-    latest_date = dt.datetime.strptime(startdate, '%Y-%m-%d')
-    
-    # Close session
+    session = Session(engine)
+    #Create query for only start date
+    if end is None:
+        results = (
+            session.query(
+                func.min(Measurement.tobs),
+                func.avg(Measurement.tobs),
+                func.max(Measurement.tobs)
+            )
+            .filter(Measurement.date >= start)
+            .all()
+        )
+    #Create query for start and end date
+    else:
+        results = (
+            session.query(
+                func.min(Measurement.tobs),
+                func.avg(Measurement.tobs),
+                func.max(Measurement.tobs)
+            )
+            .filter(Measurement.date >= start)
+            .filter(Measurement.date <= end)
+            .all()
+        )
+    #Close session
     session.close()
+    # Unpack the results
+    min_temp, avg_temp, max_temp = results[0]
 
-    return latest_date.strftime("%Y %m")
+    temp_stats = [
+        {"Min Temperature": min_temp},
+        {"Avg Temperature": avg_temp},
+        {"Max Temperature": max_temp}
+    ]
+
+    return jsonify(temp_stats)
 
 if __name__ == '__main__':
     app.run(debug=True)
