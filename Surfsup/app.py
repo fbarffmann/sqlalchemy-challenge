@@ -1,13 +1,10 @@
 # Import the dependencies.
 import numpy as np
-
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-
 import datetime as dt
-
 from flask import Flask, jsonify
 
 
@@ -49,8 +46,8 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/&lt;start&gt; - Specify start date in 'YYYY-MM-DD' format<br/>"
-        f"/api/v1.0/&lt;start&gt;/&lt;end&gt; - Specify start and end dates in 'YYYY-MM-DD' format"
+        f"/api/v1.0/<start> (e.g., /api/v1.0/2017-01-01)<br/>"
+        f"/api/v1.0/<start>/<end> (e.g., /api/v1.0/2017-01-01/2017-12-31)"
     )
 
 #Establishing Precipitation route
@@ -162,7 +159,7 @@ def temperature_stats(start=None, end=None):
     session.close()
     # Unpack the results
     min_temp, avg_temp, max_temp = results[0]
-
+    # Create a list of dictionaries with the results
     temp_stats = [
         {"Min Temperature": min_temp},
         {"Avg Temperature": avg_temp},
