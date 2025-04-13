@@ -1,8 +1,31 @@
-# sqlalchemy-challenge
-This repository contains the challenge for Module 10 capturing SQLAlchemy.
+# SQLAlchemy Climate Data Analysis
 
-In climate.ipynb, class notes/discussions were leveraged. W3 schools was used when employing the .scalar().
+Built a Flask API to explore climate data from Hawaii using SQLAlchemy and SQLite. Automated data extraction, performed database queries, and visualized temperature and precipitation trends to support environmental insights.
 
-In app.py, class notes/discussions were also leveraged. W3 schools was also used when figuring out the syntax for the start/end portion of the problem set.
+## Tools & Technologies Used
 
+- Python
+- SQLAlchemy (ORM)
+- SQLite
+- Flask (API Development)
+- Pandas
+- Matplotlib
 
+## File Structure
+
+```text
+Surfsup/
+├── app.py - Flask API with SQLAlchemy queries
+├── climate.ipynb - Data analysis and visualization
+├── Resources/
+│   ├── hawaii.sqlite - SQLite database
+│   ├── hawaii_measurements.csv - Measurement data
+│   └── hawaii_stations.csv - Station data
+```
+
+## Skills Demonstrated
+
+- Building RESTful APIs using Flask
+- Querying databases with SQLAlchemy ORM
+- Visualizing trends in climate data
+- Transforming raw data into business-relevant insights
